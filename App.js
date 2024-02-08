@@ -11,37 +11,45 @@ import {
 import uuid from "react-native-uuid";
 
 const App = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [idSelected, setIdSelected] = useState("");
+  const [product, setProduct] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState("");
   const [checkList, setCheckList] = useState([]);
-  const [newPurchase, setNewPurchase] = useState({
-    id: "",
-    product: "",
-    quantity: "",
-    type: "",
-    price: "",
-  });
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [purchaseSelected, setPurchaseSelected] = useState("");
 
   const addPurchase = () => {
+    const newPurchase = {
+      id: uuid.v4(),
+      product: product,
+      quantity: quantity,
+      type: type,
+      price: price,
+    };
     setCheckList([...checkList, newPurchase]);
-    setNewPurchase({ id: "", product: "", quantity: "", type: "", price: "" });
+    setProduct("");
+    setQuantity("");
+    setType("");
+    setPrice("");
   };
   const onHandlerProduct = (p) => {
-    setNewPurchase({ ...newPurchase, product: p, id: uuid.v4() });
+    setProduct(p);
   };
   const onHandlerQuantity = (q) => {
-    setNewPurchase({ ...newPurchase, quantity: q });
+    setQuantity(q);
   };
   const onHandlerType = (t) => {
-    setNewPurchase({ ...newPurchase, type: t });
+    setType(t);
   };
   const onHandlerPrice = (p) => {
-    setNewPurchase({ ...newPurchase, price: p });
+    setPrice(p);
   };
 
   const onHandlerModal = (id) => {
-    setIdSelected(id);
-    setModalVisible(true);
+    setPurchaseSelected(id);
+    setModalVisible(!modalVisible);
   };
   const deletePurchase = (id) => {
     setCheckList(checkList.filter((item) => item.id != id));
@@ -54,7 +62,7 @@ const App = () => {
           placeholder="Ingresar producto"
           style={styles.input}
           onChangeText={onHandlerProduct}
-          value={newPurchase.product}
+          value={product}
         ></TextInput>
 
         <View style={styles.headerQuantitySection}>
@@ -62,13 +70,13 @@ const App = () => {
             placeholder="Ingresar cantidad"
             style={styles.input}
             onChangeText={onHandlerQuantity}
-            value={newPurchase.quantity}
+            value={quantity}
           ></TextInput>
           <TextInput
             placeholder="Unidad de medida (kg,lt,unidad)"
             style={styles.input}
             onChangeText={onHandlerType}
-            value={newPurchase.type}
+            value={type}
           ></TextInput>
         </View>
 
@@ -76,7 +84,7 @@ const App = () => {
           placeholder="Ingresar precio por unidad/kg/lt"
           style={styles.input}
           onChangeText={onHandlerPrice}
-          value={newPurchase.price}
+          value={price}
         ></TextInput>
         <Button
           title="Agregar"
@@ -124,15 +132,14 @@ const App = () => {
               <Button
                 title="Si"
                 onPress={() => {
-                  console.log("eliminado");
-                  deletePurchase(idSelected);
-                  setModalVisible(false);
+                  deletePurchase(purchaseSelected);
+                  onHandlerModal();
                 }}
                 color={"#ff9b85"}
               />
               <Button
                 title="No"
-                onPress={() => setModalVisible(false)}
+                onPress={() => onHandlerModal()}
                 color={"#ff9b85"}
               />
             </View>
