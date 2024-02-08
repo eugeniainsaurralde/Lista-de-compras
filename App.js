@@ -6,9 +6,9 @@ import {
   Button,
   StyleSheet,
   FlatList,
+  Modal,
 } from "react-native";
 import uuid from "react-native-uuid";
-import { Modal } from "react-native-web";
 
 const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -116,24 +116,26 @@ const App = () => {
         />
       </View>
 
-      <Modal visible={modalVisible} style={styles.modal}>
-        <View style={styles.modalContent}>
-          <Text>¿Estas seguro de eliminar este recado?</Text>
-          <View style={styles.cardActions}>
-            <Button
-              title="Si"
-              onPress={() => {
-                console.log("eliminado");
-                deletePurchase(idSelected);
-                setModalVisible(false);
-              }}
-              color={"#ff9b85"}
-            />
-            <Button
-              title="No"
-              onPress={() => setModalVisible(false)}
-              color={"#ff9b85"}
-            />
+      <Modal visible={modalVisible} transparent={true}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContente}>
+            <Text>¿Estas seguro de eliminar este recado?</Text>
+            <View style={styles.cardActions}>
+              <Button
+                title="Si"
+                onPress={() => {
+                  console.log("eliminado");
+                  deletePurchase(idSelected);
+                  setModalVisible(false);
+                }}
+                color={"#ff9b85"}
+              />
+              <Button
+                title="No"
+                onPress={() => setModalVisible(false)}
+                color={"#ff9b85"}
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -186,12 +188,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     margin: "2%",
   },
-  modal: {
+
+  modalBackground: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  modalContent: {
     backgroundColor: "rgba(52, 52, 52, 0.8)",
+  },
+  modalContente: {
+    padding: "5%",
+    borderRadius: 10,
+    backgroundColor: "white",
   },
 });
